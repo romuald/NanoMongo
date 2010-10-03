@@ -15,7 +15,7 @@ class NanoMongo(dict):
     @cvar _insert_defaults: values to set if not specificied for new records
     @cvar _private_fields items that should not be stored
     @cvar _safe_update default: wait for server reply when saving
-    
+
     """
     collection = None
     _insert_defaults = None
@@ -27,7 +27,7 @@ class NanoMongo(dict):
         kwargs['as_class'] = cls
 
         return cls.collection.find(*args, **kwargs)
-    
+
     @classmethod
     def find_one(cls, *args, **kwargs):
         kwargs['as_class'] = cls
@@ -47,12 +47,12 @@ class NanoMongo(dict):
                     self[key] = value(self)
                 else:
                     self[key] = value
-        
+
         # No private field, save as is
         if not self._private_fields:
             self._id = self.collection.save(self, safe=safe)
             return self._id
-        
+
         copy = self.copy()
         for to_remove in set(self._private_fields) & set(copy):
             del copy[to_remove]
@@ -61,7 +61,7 @@ class NanoMongo(dict):
 
     def delete(self):
         return self.collection.remove(self['_id'])
-    
+
     def reload(self):
         fresh = self.find_one(self._id)
         super(NanoMongo, self).update(fresh)
