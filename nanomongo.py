@@ -70,11 +70,18 @@ class NanoMongo(dict):
         return self
 
     # strangelly, __getattr__ = __setitem__ won't work
-    # (as opposed to getattr = getitem)
     def __setattr__(self, name, value):
         self[name] = value
 
+    def __getattr__(self, name):
+        """Alias __getattr__ to __getitem___, but raise an Attribute error
+        on miss (some libs rely on an AttributeError being raised)"""
+        if name in self:
+            return self[name]
+
+        raise AttributeError("'%s' object has no attribute '%s'" %
+            (self.__class__.__name__, name))
+
 # Override missing attributes to fetch dictionary items
-NanoMongo.__getattr__ = NanoMongo.__getitem__
 NanoMongo.__delattr__ = NanoMongo.__delitem__
-#NanoMongo.__setattr__ = NanoMongo.__setitem__
+
