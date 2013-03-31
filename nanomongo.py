@@ -1,6 +1,7 @@
 """NanoMongo, a minimalistic python class to handle Mongo collections
 """
-import pymongo
+# import pymongo
+
 
 class NanoMongo(dict):
     """
@@ -80,8 +81,7 @@ class NanoMongo(dict):
             return self[name]
 
         raise AttributeError("'%s' object has no attribute '%s'" %
-            (self.__class__.__name__, name))
+                             (self.__class__.__name__, name))
 
 # Override missing attributes to fetch dictionary items
 NanoMongo.__delattr__ = NanoMongo.__delitem__
-
